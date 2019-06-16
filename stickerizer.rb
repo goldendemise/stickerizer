@@ -11,14 +11,21 @@ class Stickerizer
     Extension.new(filename[-4..-1])
   end
 
+  ImageFormat = Struct.new(:size, :format)
+
+  def telegram_format
+    ImageFormat.new('512x512', 'PNG')
+  end
+
   def initialize
     @convert = DirTermine.new
   end
 
   def stickerize(pic_file, save_dir)
+    sticker_format = telegram_format
     image = MiniMagick::Image.open(pic_file)
-    image.resize '512x512'
-    image.format 'PNG'
+    image.resize sticker_format.size
+    image.format sticker_format.format
     image.write(save_dir + '/' + stickername(pic_file))
 
   end
@@ -37,7 +44,7 @@ class Stickerizer
   end
 
   def valid?(file)
-    #TODO: Change this to check file types instead of relying on filenames
+    # TODO: Change this to check file types instead of relying on filenames
     valid = false
     file_info = file_ext(file)
     valid = true if file_info.extension == '.png'
@@ -52,7 +59,6 @@ class Stickerizer
     destination = dest_dir
     puts "#{origin} is origin"
     Dir.children(origin).each do |unstickerized|
-      puts "#{unstickerized} OOA"
       next unless valid?(unstickerized)
 
       stickerize("#{origin}/#{unstickerized}", destination)
