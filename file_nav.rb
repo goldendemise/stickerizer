@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-
+# TODO: add recursion support to directories
 class DirTermine
 
   attr_accessor :save_dir, :source_dir
@@ -30,8 +30,7 @@ class DirTermine
     puts 'Please enter directory containing pictures to stickerize (Leave blank for current directory)'
     dir = gets.chomp
     dir = Dir.getwd if dir.empty?
-    puts File.expand_path(dir) + " IS ORIGIN"
-    dir
+    File.expand_path(dir)
   end
 
 end

@@ -20,11 +20,12 @@ class Stickerizer
     image.resize '512x512'
     image.format 'PNG'
     image.write(save_dir + '/' + stickername(pic_file))
-    puts "#{pic_file} | #{save_dir}"
+
   end
 
   def stickername(filename)
-    "#{filename[0..-5]}_sticker.png"
+    file_only = filename.sub %r{/.+/}, ''
+    "#{file_only[0..-5]}_sticker.png"
   end
 
   def origin_dir
@@ -36,6 +37,7 @@ class Stickerizer
   end
 
   def valid?(file)
+    #TODO: Change this to check file types instead of relying on filenames
     valid = false
     file_info = file_ext(file)
     valid = true if file_info.extension == '.png'
@@ -48,9 +50,12 @@ class Stickerizer
   def convert_images
     origin = origin_dir
     destination = dest_dir
+    puts "#{origin} is origin"
     Dir.children(origin).each do |unstickerized|
+      puts "#{unstickerized} OOA"
       next unless valid?(unstickerized)
-      stickerize(unstickerized, destination)
+
+      stickerize("#{origin}/#{unstickerized}", destination)
     end
   end
 end
