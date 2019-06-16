@@ -4,34 +4,34 @@ class DirTermine
 
   attr_accessor :save_dir, :source_dir
 
-  # def initialize
-  #   @save_dir = save_dir
-  #   @source_dir = source_dir
-  # end
+  def initialize
+     @save_dir = save_dir
+     @source_dir = source_dir
+  end
+
+  def default_dir
+    File.expand_path('~/Pictures/stickerized')
+  end
+
+  def create_dir(dir)
+    Dir.mkdir(File.expand_path(dir)) unless File.directory?(File.expand_path(dir))
+  end
 
   def destination_dir
     puts 'Please enter desired save directory (Leave blank for ~/Pictures/stickerized)'
     dir = gets.chomp
-    '~/Pictures/stickerized' if dir.empty?
+    dir = default_dir unless File.directory?(File.expand_path(dir))
+    create_dir(dir)
+    puts File.expand_path(dir) + " IS DESTINATION"
+    return File.expand_path(dir)
   end
 
   def origin_dir
     puts 'Please enter directory containing pictures to stickerize (Leave blank for current directory)'
     dir = gets.chomp
-    Dir.getwd if dir.empty?
+    dir = Dir.getwd if dir.empty?
+    puts File.expand_path(dir) + " IS ORIGIN"
+    File.expand_path(dir)
   end
-  # 
-  # def establish_dirs
-  #   @source_dir = File.expand_path(origin_dir)
-  #   @save_dir = File.expand_path(destination_dir)
-  # end
 
-  def dbug
-    puts @source_dir
-    puts @save_dir
-  end
 end
-
-# testr = DirTermine.new
-# testr.establish_dirs
-# testr.dbug

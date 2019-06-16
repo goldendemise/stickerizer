@@ -4,6 +4,13 @@ require 'mini_magick'
 require_relative 'file_nav'
 
 class Stickerizer
+
+  Extension = Struct.new(:extension)
+
+  def file_ext(filename)
+    Extension.new(filename[-4..-1])
+  end
+
   def initialize
     @convert = DirTermine.new
   end
@@ -11,8 +18,13 @@ class Stickerizer
   def stickerize(pic_file, save_dir)
     image = MiniMagick::Image.open(pic_file)
     image.resize '512x512'
-    image.format 'png'
-    image.write "#{save_dir}#{pic_file}_stickerized.png"
+    image.format 'PNG'
+    image.write(save_dir + '/' + stickername(pic_file))
+    puts "#{pic_file} | #{save_dir}"
+  end
+
+  def stickername(filename)
+    "#{filename[0..-5]}_sticker.png"
   end
 
   def origin_dir
@@ -25,11 +37,11 @@ class Stickerizer
 
   def valid?(file)
     valid = false
-    extension = file[-4..-1]
-    valid = true if extension == '.png'
-    valid = true if extension == '.jpg'
-    valid = true if extension == '.gif'
-    puts "File #{file}: valid: #{valid.to_s}"
+    file_info = file_ext(file)
+    valid = true if file_info.extension == '.png'
+    valid = true if file_info.extension == '.jpg'
+    valid = true if file_info.extension == '.gif'
+    puts "File #{file}: valid: #{valid}"
     valid
   end
 
@@ -38,7 +50,7 @@ class Stickerizer
     destination = dest_dir
     Dir.children(origin).each do |unstickerized|
       next unless valid?(unstickerized)
-      stickerize("#{origin}/#{unstickerized}", destination)
+      stickerize(unstickerized, destination)
     end
   end
 end
