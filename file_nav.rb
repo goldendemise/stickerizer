@@ -22,7 +22,6 @@ class DirTermine
     dir = gets.chomp
     dir = default_dir if dir.empty? || dir.nil?
     create_dir(dir)
-    puts dir + " IS DESTINATION"
     File.expand_path(dir)
   end
 
