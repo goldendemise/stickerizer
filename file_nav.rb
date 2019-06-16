@@ -20,10 +20,10 @@ class DirTermine
   def destination_dir
     puts 'Please enter desired save directory (Leave blank for ~/Pictures/stickerized)'
     dir = gets.chomp
-    dir = default_dir unless File.directory?(File.expand_path(dir))
+    dir = default_dir if dir.empty? || dir.nil?
     create_dir(dir)
-    puts File.expand_path(dir) + " IS DESTINATION"
-    return File.expand_path(dir)
+    puts dir + " IS DESTINATION"
+    File.expand_path(dir)
   end
 
   def origin_dir
@@ -31,7 +31,7 @@ class DirTermine
     dir = gets.chomp
     dir = Dir.getwd if dir.empty?
     puts File.expand_path(dir) + " IS ORIGIN"
-    File.expand_path(dir)
+    dir
   end
 
 end
