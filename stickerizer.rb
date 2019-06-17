@@ -47,9 +47,9 @@ class Stickerizer
     # TODO: Change this to check file types instead of relying on filenames
     valid = false
     file_info = file_ext(file)
-    valid = true if file_info.extension == '.png'
-    valid = true if file_info.extension == '.jpg'
-    valid = true if file_info.extension == '.gif'
+    valid = true if file_info.extension.downcase == '.png'
+    valid = true if file_info.extension.downcase == '.jpg'
+    valid = true if file_info.extension.downcase == '.gif'
     puts "File #{file}: valid: #{valid}"
     valid
   end
